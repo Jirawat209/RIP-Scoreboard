@@ -103,32 +103,45 @@ function App() {
   const [lastMonthWinner, setLastMonthWinner] = useState(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/leaderboard`)
-      .then(res => res.json())
-      .then(data => setCountries(data))
-      .catch(err => console.error('Failed to fetch leaderboard:', err));
+    const fetchLeaderboard = async () => {
+      const { data } = await supabase
+        .from('countries')
+        .select('*')
+        .order('position', { ascending: true })
+        .order('id', { ascending: true });
+      if (data) setCountries(data);
+    };
 
-    fetch(`${API_URL}/settings`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.last_month_winner) {
-          setLastMonthWinner(data.last_month_winner);
-        }
+    const fetchSettings = async () => {
+      const { data } = await supabase
+        .from('settings')
+        .select('value')
+        .eq('key', 'last_month_winner')
+        .single();
+      if (data && data.value) setLastMonthWinner(data.value);
+    };
+
+    fetchLeaderboard();
+    fetchSettings();
+
+    const countrySub = supabase
+      .channel('public:countries')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'countries' }, () => {
+        fetchLeaderboard();
       })
-      .catch(console.error);
+      .subscribe();
 
-    const socket = io(SOCKET_URL);
-    socket.on('score_update', (data) => {
-      setCountries(data);
-    });
+    const settingSub = supabase
+      .channel('public:settings')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, () => {
+        fetchSettings();
+      })
+      .subscribe();
 
-    socket.on('settings_update', (data) => {
-      if (data.last_month_winner) {
-        setLastMonthWinner(data.last_month_winner);
-      }
-    });
-
-    return () => socket.disconnect();
+    return () => {
+      supabase.removeChannel(countrySub);
+      supabase.removeChannel(settingSub);
+    };
   }, []);
 
   const highestScorer = countries.length > 0 ? [...countries].sort((a, b) => b.score - a.score)[0] : null;

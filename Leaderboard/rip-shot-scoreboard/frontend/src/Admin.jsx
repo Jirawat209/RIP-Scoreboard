@@ -12,7 +12,7 @@ export default function Admin() {
     const [historyScore, setHistoryScore] = useState(0);
 
     const fetchLeaderboard = async () => {
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from('countries')
             .select('*')
             .order('position', { ascending: true })
@@ -22,7 +22,17 @@ export default function Admin() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            fetchLeaderboard();
+            let ignore = false;
+
+            const initLeaderboard = async () => {
+                const { data } = await supabase
+                    .from('countries')
+                    .select('*')
+                    .order('position', { ascending: true })
+                    .order('id', { ascending: true });
+                if (data && !ignore) setCountries(data);
+            };
+            initLeaderboard();
 
             Promise.all([
                 fetch('https://restcountries.com/v3.1/all?fields=name,cca2').then(res => res.json()),
@@ -52,6 +62,8 @@ export default function Admin() {
                     }
                 })
                 .catch(err => console.error('Error fetching admin data:', err));
+
+            return () => { ignore = true; };
         }
     }, [isAuthenticated]);
 
