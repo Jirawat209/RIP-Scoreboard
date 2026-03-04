@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
-import { Flame } from 'lucide-react';
+import { Flame, Maximize, Minimize } from 'lucide-react';
 import './App.css';
 
 const CountryCell = ({ country, isHighest }) => {
@@ -101,6 +101,27 @@ const BottomBanner = ({ historicalWinner }) => {
 function App() {
   const [countries, setCountries] = useState([]);
   const [lastMonthWinner, setLastMonthWinner] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -158,6 +179,15 @@ function App() {
       >
         <source src="/fire-loop.mp4" type="video/mp4" />
       </video>
+
+      {/* Fullscreen Toggle Button */}
+      <button
+        onClick={toggleFullScreen}
+        className="absolute bottom-4 right-4 z-50 p-3 bg-black/40 hover:bg-black/80 border border-white/20 text-white/50 hover:text-white rounded-full transition-all duration-300 backdrop-blur-sm shadow-xl cursor-pointer"
+        title="Toggle Fullscreen"
+      >
+        {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
+      </button>
 
       <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-[1080px] mx-auto justify-center">
 
