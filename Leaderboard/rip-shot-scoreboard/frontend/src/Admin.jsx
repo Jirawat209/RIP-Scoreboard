@@ -10,6 +10,7 @@ export default function Admin() {
 
     const [historyCountryCode, setHistoryCountryCode] = useState('');
     const [historyScore, setHistoryScore] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const fetchLeaderboard = async () => {
         const { data } = await supabase
@@ -234,45 +235,59 @@ export default function Admin() {
                 </div>
 
                 {/* Manage Scores */}
-                <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
-                    <h2 className="text-xl font-semibold mb-6 text-gray-200">Manage Scores</h2>
+                <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg border border-gray-700">
+                    <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                        <h2 className="text-xl font-semibold text-gray-200">Manage Scores</h2>
+                        <input
+                            type="text"
+                            placeholder="Search countries..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full sm:max-w-xs bg-gray-700 text-white border border-gray-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                        />
+                    </div>
                     <div className="space-y-4">
-                        {countries.map((country, idx) => (
-                            <div key={country.id} className="flex flex-col md:flex-row items-center justify-between bg-gray-700 p-4 rounded border border-gray-600 gap-4">
-                                <div className="flex items-center gap-4 w-full md:w-auto">
-                                    <div className="flex flex-col gap-1 items-center justify-center pr-2 border-r border-gray-600">
-                                        <button onClick={() => moveCountry(idx, 'up')} disabled={idx === 0} className="text-gray-400 hover:text-white disabled:opacity-30">▲</button>
-                                        <button onClick={() => moveCountry(idx, 'down')} disabled={idx === countries.length - 1} className="text-gray-400 hover:text-white disabled:opacity-30">▼</button>
+                        {countries
+                            .filter(country => country.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                            .map((country, idx) => (
+                                <div key={country.id} className="flex flex-col xl:flex-row items-center justify-between bg-gray-700 p-3 sm:p-4 rounded border border-gray-600 gap-4">
+                                    <div className="flex flex-row items-center gap-2 sm:gap-4 w-full xl:w-auto">
+                                        <div className="flex flex-col gap-1 items-center justify-center pr-2 border-r border-gray-600">
+                                            <button onClick={() => moveCountry(idx, 'up')} disabled={idx === 0} className="text-gray-400 hover:text-white disabled:opacity-30">▲</button>
+                                            <button onClick={() => moveCountry(idx, 'down')} disabled={idx === countries.length - 1} className="text-gray-400 hover:text-white disabled:opacity-30">▼</button>
+                                        </div>
+                                        <img src={country.flag_url} alt={country.name} className="w-12 h-8 object-cover rounded shadow" />
+                                        <div>
+                                            <h3 className="font-bold text-lg">{country.name}</h3>
+                                            <p className="text-gray-400 text-xs sm:text-sm">Score: <span className="text-white font-mono text-base sm:text-lg">{country.score}</span></p>
+                                        </div>
                                     </div>
-                                    <img src={country.flag_url} alt={country.name} className="w-12 h-8 object-cover rounded shadow" />
-                                    <div>
-                                        <h3 className="font-bold text-lg">{country.name}</h3>
-                                        <p className="text-gray-400 text-sm">Score: <span className="text-white font-mono text-lg">{country.score}</span></p>
-                                    </div>
-                                </div>
 
-                                <div className="flex flex-wrap justify-center gap-2 w-full md:w-auto mt-2 md:mt-0">
-                                    <button onClick={() => updateScore(country.id, country.score + 1)} className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded font-mono shrink-0">
-                                        +1
-                                    </button>
-                                    <button onClick={() => updateScore(country.id, country.score + 5)} className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-mono shrink-0">
-                                        +5
-                                    </button>
-                                    <button onClick={() => updateScore(country.id, country.score - 1)} className="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded font-mono shrink-0">
-                                        -1
-                                    </button>
-                                    <button onClick={() => updateScore(country.id, 0)} className="bg-red-800 hover:bg-red-700 px-4 py-2 rounded text-sm shrink-0">
-                                        Reset
-                                    </button>
-                                    <button onClick={() => deleteCountry(country.id)} className="bg-orange-800 hover:bg-orange-700 px-4 py-2 rounded text-sm shrink-0">
-                                        Delete
-                                    </button>
+                                    <div className="flex flex-wrap justify-center gap-2 w-full xl:w-auto mt-2 xl:mt-0">
+                                        <button onClick={() => updateScore(country.id, country.score + 1)} className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded font-mono shrink-0">
+                                            +1
+                                        </button>
+                                        <button onClick={() => updateScore(country.id, country.score + 5)} className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-mono shrink-0">
+                                            +5
+                                        </button>
+                                        <button onClick={() => updateScore(country.id, country.score - 1)} className="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded font-mono shrink-0">
+                                            -1
+                                        </button>
+                                        <button onClick={() => updateScore(country.id, 0)} className="bg-red-800 hover:bg-red-700 px-4 py-2 rounded text-sm shrink-0">
+                                            Reset
+                                        </button>
+                                        <button onClick={() => deleteCountry(country.id)} className="bg-orange-800 hover:bg-orange-700 px-4 py-2 rounded text-sm shrink-0">
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
 
                         {countries.length === 0 && (
                             <div className="text-center text-gray-500 py-8">No countries added yet.</div>
+                        )}
+                        {countries.length > 0 && countries.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+                            <div className="text-center text-gray-500 py-8">No countries matching "{searchQuery}"</div>
                         )}
                     </div>
                 </div>
