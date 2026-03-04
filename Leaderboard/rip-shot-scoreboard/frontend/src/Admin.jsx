@@ -157,9 +157,9 @@ export default function Admin() {
     return (
         <div className="min-h-screen bg-gray-900 text-white p-8">
             <div className="max-w-4xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold">Leaderboard Admin</h1>
-                    <button onClick={resetAll} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold transition-colors">
+                <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                    <h1 className="text-3xl font-bold w-full sm:w-auto text-center sm:text-left">Leaderboard Admin</h1>
+                    <button onClick={resetAll} className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold transition-colors">
                         Reset All Scores
                     </button>
                 </div>
@@ -167,8 +167,8 @@ export default function Admin() {
                 {/* Add Country Form */}
                 <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 border border-gray-700">
                     <h2 className="text-xl font-semibold mb-4 text-gray-200">Select Country to Add</h2>
-                    <form onSubmit={addCountry} className="flex gap-4 items-end flex-wrap">
-                        <div className="flex-1 min-w-[300px]">
+                    <form onSubmit={addCountry} className="flex flex-col sm:flex-row gap-4 sm:items-end">
+                        <div className="flex-1 w-full sm:w-auto min-w-0 sm:min-w-[300px]">
                             <label className="block text-sm text-gray-400 mb-1">Country</label>
                             <select
                                 required
@@ -187,7 +187,7 @@ export default function Admin() {
                                 )}
                             </select>
                         </div>
-                        <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold transition-colors mt-6 md:mt-0">
+                        <button type="submit" className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold transition-colors mt-2 sm:mt-0">
                             Add
                         </button>
                     </form>
@@ -196,8 +196,8 @@ export default function Admin() {
                 {/* History Settings Form */}
                 <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 border border-gray-700">
                     <h2 className="text-xl font-semibold mb-4 text-gray-200">Last Month Winner Settings</h2>
-                    <form onSubmit={updateHistorySettings} className="flex gap-4 items-end flex-wrap">
-                        <div className="flex-1 min-w-[250px]">
+                    <form onSubmit={updateHistorySettings} className="flex flex-col sm:flex-row gap-4 sm:items-end">
+                        <div className="flex-1 w-full sm:w-auto min-w-0 sm:min-w-[250px]">
                             <label className="block text-sm text-gray-400 mb-1">Country</label>
                             <select
                                 required
@@ -216,7 +216,7 @@ export default function Admin() {
                                 )}
                             </select>
                         </div>
-                        <div className="w-[120px]">
+                        <div className="w-full sm:w-[120px]">
                             <label className="block text-sm text-gray-400 mb-1">Score</label>
                             <input
                                 type="number"
@@ -227,7 +227,7 @@ export default function Admin() {
                                 className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-                        <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold transition-colors mt-6 md:mt-0">
+                        <button type="submit" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold transition-colors mt-2 sm:mt-0">
                             Save Winner
                         </button>
                     </form>
@@ -251,7 +251,7 @@ export default function Admin() {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+                                <div className="flex flex-wrap justify-center gap-2 w-full md:w-auto mt-2 md:mt-0">
                                     <button onClick={() => updateScore(country.id, country.score + 1)} className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded font-mono shrink-0">
                                         +1
                                     </button>
