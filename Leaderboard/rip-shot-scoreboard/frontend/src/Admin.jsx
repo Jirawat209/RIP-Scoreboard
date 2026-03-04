@@ -11,6 +11,8 @@ export default function Admin() {
     const [historyCountryCode, setHistoryCountryCode] = useState('');
     const [historyScore, setHistoryScore] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
+    const [addCountrySearch, setAddCountrySearch] = useState('');
+    const [historyCountrySearch, setHistoryCountrySearch] = useState('');
 
     const fetchLeaderboard = async () => {
         const { data } = await supabase
@@ -169,24 +171,35 @@ export default function Admin() {
                 <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 border border-gray-700">
                     <h2 className="text-xl font-semibold mb-4 text-gray-200">Select Country to Add</h2>
                     <form onSubmit={addCountry} className="flex flex-col sm:flex-row gap-4 sm:items-end">
-                        <div className="flex-1 w-full sm:w-auto min-w-0 sm:min-w-[300px]">
-                            <label className="block text-sm text-gray-400 mb-1">Country</label>
-                            <select
-                                required
-                                value={selectedCountryCode}
-                                onChange={e => setSelectedCountryCode(e.target.value)}
-                                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white outline-none cursor-pointer focus:ring-2 focus:ring-blue-500 appearance-auto"
-                            >
-                                {availableCountries.length > 0 ? (
-                                    availableCountries.map(c => (
-                                        <option key={c.cca2} value={c.cca2} className="bg-gray-800 text-white p-2">
-                                            {c.name.common}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option value="" disabled>Loading countries...</option>
-                                )}
-                            </select>
+                        <div className="flex-1 w-full sm:w-auto min-w-0 sm:min-w-[300px] flex flex-col gap-2">
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Search & Select</label>
+                                <input
+                                    type="text"
+                                    placeholder="Type to filter countries..."
+                                    value={addCountrySearch}
+                                    onChange={e => setAddCountrySearch(e.target.value)}
+                                    className="w-full bg-gray-700 text-white border border-gray-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none mb-2"
+                                />
+                                <select
+                                    required
+                                    value={selectedCountryCode}
+                                    onChange={e => setSelectedCountryCode(e.target.value)}
+                                    className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white outline-none cursor-pointer focus:ring-2 focus:ring-blue-500 appearance-auto"
+                                >
+                                    {availableCountries.length > 0 ? (
+                                        availableCountries
+                                            .filter(c => c.name.common.toLowerCase().includes(addCountrySearch.toLowerCase()))
+                                            .map(c => (
+                                                <option key={c.cca2} value={c.cca2} className="bg-gray-800 text-white p-2">
+                                                    {c.name.common}
+                                                </option>
+                                            ))
+                                    ) : (
+                                        <option value="" disabled>Loading countries...</option>
+                                    )}
+                                </select>
+                            </div>
                         </div>
                         <button type="submit" className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold transition-colors mt-2 sm:mt-0">
                             Add
@@ -198,24 +211,35 @@ export default function Admin() {
                 <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-8 border border-gray-700">
                     <h2 className="text-xl font-semibold mb-4 text-gray-200">Last Month Winner Settings</h2>
                     <form onSubmit={updateHistorySettings} className="flex flex-col sm:flex-row gap-4 sm:items-end">
-                        <div className="flex-1 w-full sm:w-auto min-w-0 sm:min-w-[250px]">
-                            <label className="block text-sm text-gray-400 mb-1">Country</label>
-                            <select
-                                required
-                                value={historyCountryCode}
-                                onChange={e => setHistoryCountryCode(e.target.value)}
-                                className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white outline-none cursor-pointer focus:ring-2 focus:ring-blue-500 appearance-auto"
-                            >
-                                {availableCountries.length > 0 ? (
-                                    availableCountries.map(c => (
-                                        <option key={c.cca2} value={c.cca2} className="bg-gray-800 text-white p-2">
-                                            {c.name.common}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <option value="" disabled>Loading countries...</option>
-                                )}
-                            </select>
+                        <div className="flex-1 w-full sm:w-auto min-w-0 sm:min-w-[250px] flex flex-col gap-2">
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Search & Select</label>
+                                <input
+                                    type="text"
+                                    placeholder="Type to filter countries..."
+                                    value={historyCountrySearch}
+                                    onChange={e => setHistoryCountrySearch(e.target.value)}
+                                    className="w-full bg-gray-700 text-white border border-gray-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none mb-2"
+                                />
+                                <select
+                                    required
+                                    value={historyCountryCode}
+                                    onChange={e => setHistoryCountryCode(e.target.value)}
+                                    className="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white outline-none cursor-pointer focus:ring-2 focus:ring-blue-500 appearance-auto"
+                                >
+                                    {availableCountries.length > 0 ? (
+                                        availableCountries
+                                            .filter(c => c.name.common.toLowerCase().includes(historyCountrySearch.toLowerCase()))
+                                            .map(c => (
+                                                <option key={c.cca2} value={c.cca2} className="bg-gray-800 text-white p-2">
+                                                    {c.name.common}
+                                                </option>
+                                            ))
+                                    ) : (
+                                        <option value="" disabled>Loading countries...</option>
+                                    )}
+                                </select>
+                            </div>
                         </div>
                         <div className="w-full sm:w-[120px]">
                             <label className="block text-sm text-gray-400 mb-1">Score</label>
