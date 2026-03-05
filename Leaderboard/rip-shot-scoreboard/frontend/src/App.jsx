@@ -16,7 +16,7 @@ const CountryCell = ({ country, isHighest }) => {
         <img
           src={country.flag_url}
           alt={country.name}
-          className="w-[48px] h-[32px] lg:w-[96px] lg:h-[64px] object-cover"
+          className="w-[42px] h-[28px] lg:w-[72px] lg:h-[48px] object-cover shadow-[0_0_10px_rgba(0,0,0,0.5)]"
         />
       </div>
 
@@ -25,10 +25,10 @@ const CountryCell = ({ country, isHighest }) => {
           <img
             src="/fire-custom-transparent.gif"
             alt="Highest Score Fire"
-            className="w-8 h-8 lg:w-16 lg:h-16 object-contain absolute opacity-80 pointer-events-none mr-[110%]"
+            className="w-10 h-10 lg:w-14 lg:h-14 object-contain absolute opacity-80 pointer-events-none right-[100%] mr-1 lg:mr-2"
           />
         )}
-        <span className="text-[#d0e00d] text-4xl lg:text-[56px] font-roboto font-black tracking-tight drop-shadow-glow z-10">
+        <span className="text-[#d0e00d] text-3xl lg:text-[40px] font-roboto font-black tracking-tight drop-shadow-glow z-10 w-[2ch] text-right">
           {country.score}
         </span>
       </div>
