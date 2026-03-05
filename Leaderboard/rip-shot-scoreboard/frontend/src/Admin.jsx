@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { GripVertical } from 'lucide-react';
 
 export default function Admin() {
     const [countries, setCountries] = useState([]);
@@ -78,22 +80,23 @@ export default function Admin() {
         fetchLeaderboard();
     };
 
-    const moveCountry = async (index, direction) => {
-        if (direction === 'up' && index === 0) return;
-        if (direction === 'down' && index === countries.length - 1) return;
+    const onDragEnd = async (result) => {
+        if (!result.destination) return;
+        if (searchQuery) return; // Disable drop modifications while list is filtered
 
-        const newOrder = [...countries];
-        const swapIndex = direction === 'up' ? index - 1 : index + 1;
-        const temp = newOrder[index];
-        newOrder[index] = newOrder[swapIndex];
-        newOrder[swapIndex] = temp;
+        const sourceIndex = result.source.index;
+        const destinationIndex = result.destination.index;
+        if (sourceIndex === destinationIndex) return;
+
+        const newOrder = Array.from(countries);
+        const [movedItem] = newOrder.splice(sourceIndex, 1);
+        newOrder.splice(destinationIndex, 0, movedItem);
 
         setCountries(newOrder);
 
         for (let i = 0; i < newOrder.length; i++) {
             await supabase.from('countries').update({ position: i }).eq('id', newOrder[i].id);
         }
-        fetchLeaderboard();
     };
 
     const addCountry = async (e) => {
@@ -289,41 +292,60 @@ export default function Admin() {
                         />
                     </div>
                     <div className="space-y-4">
-                        {countries
-                            .filter(country => country.name.toLowerCase().includes(searchQuery.toLowerCase()))
-                            .map((country, idx) => (
-                                <div key={country.id} className="flex flex-col xl:flex-row items-center justify-between bg-gray-700 p-3 sm:p-4 rounded border border-gray-600 gap-4">
-                                    <div className="flex flex-row items-center gap-2 sm:gap-4 w-full xl:w-auto">
-                                        <div className="flex flex-col gap-1 items-center justify-center pr-2 border-r border-gray-600">
-                                            <button onClick={() => moveCountry(idx, 'up')} disabled={idx === 0} className="text-gray-400 hover:text-white disabled:opacity-30">▲</button>
-                                            <button onClick={() => moveCountry(idx, 'down')} disabled={idx === countries.length - 1} className="text-gray-400 hover:text-white disabled:opacity-30">▼</button>
-                                        </div>
-                                        <img src={country.flag_url} alt={country.name} className="w-12 h-8 object-cover rounded shadow" />
-                                        <div>
-                                            <h3 className="font-bold text-lg">{country.name}</h3>
-                                            <p className="text-gray-400 text-xs sm:text-sm">Score: <span className="text-white font-mono text-base sm:text-lg">{country.score}</span></p>
-                                        </div>
-                                    </div>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <Droppable droppableId="countries-list">
+                                {(provided) => (
+                                    <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-4">
+                                        {countries
+                                            .filter(country => country.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                                            .map((country, idx) => (
+                                                <Draggable key={country.id.toString()} draggableId={country.id.toString()} index={idx} isDragDisabled={searchQuery !== ''}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            className={`flex flex-col bg-gray-700 p-3 sm:p-4 rounded border ${snapshot.isDragging ? 'border-blue-500 shadow-2xl z-50' : 'border-gray-600'} gap-4`}
+                                                        >
+                                                            <div className="flex flex-row items-center gap-2 sm:gap-4 w-full">
+                                                                <div
+                                                                    {...provided.dragHandleProps}
+                                                                    className={`flex items-center justify-center p-2 border-r border-gray-600 ${searchQuery !== '' ? 'opacity-30 cursor-not-allowed' : 'cursor-grab active:cursor-grabbing text-gray-400 hover:text-white'}`}
+                                                                >
+                                                                    <GripVertical size={24} />
+                                                                </div>
+                                                                <img src={country.flag_url} alt={country.name} className="w-12 h-8 object-cover rounded shadow shrink-0" />
+                                                                <div className="flex-1 min-w-0">
+                                                                    <h3 className="font-bold text-lg truncate">{country.name}</h3>
+                                                                    <p className="text-gray-400 text-xs sm:text-sm">Score: <span className="text-white font-mono text-base sm:text-lg">{country.score}</span></p>
+                                                                </div>
+                                                            </div>
 
-                                    <div className="flex flex-wrap justify-center gap-2 w-full xl:w-auto mt-2 xl:mt-0">
-                                        <button onClick={() => updateScore(country.id, country.score + 1)} className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded font-mono shrink-0">
-                                            +1
-                                        </button>
-                                        <button onClick={() => updateScore(country.id, country.score + 5)} className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-mono shrink-0">
-                                            +5
-                                        </button>
-                                        <button onClick={() => updateScore(country.id, country.score - 1)} className="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded font-mono shrink-0">
-                                            -1
-                                        </button>
-                                        <button onClick={() => updateScore(country.id, 0)} className="bg-red-800 hover:bg-red-700 px-4 py-2 rounded text-sm shrink-0">
-                                            Reset
-                                        </button>
-                                        <button onClick={() => deleteCountry(country.id)} className="bg-orange-800 hover:bg-orange-700 px-4 py-2 rounded text-sm shrink-0">
-                                            Delete
-                                        </button>
+                                                            <div className="grid grid-cols-3 sm:flex sm:flex-wrap justify-center gap-2 w-full mt-2">
+                                                                <button onClick={() => updateScore(country.id, country.score + 1)} className="bg-blue-600 hover:bg-blue-500 py-3 sm:px-4 sm:py-2 rounded font-mono font-bold text-lg sm:text-base w-full sm:w-auto transition-colors">
+                                                                    +1
+                                                                </button>
+                                                                <button onClick={() => updateScore(country.id, country.score + 5)} className="bg-green-600 hover:bg-green-500 py-3 sm:px-4 sm:py-2 rounded font-mono font-bold text-lg sm:text-base w-full sm:w-auto transition-colors">
+                                                                    +5
+                                                                </button>
+                                                                <button onClick={() => updateScore(country.id, country.score - 1)} className="bg-gray-600 hover:bg-gray-500 py-3 sm:px-4 sm:py-2 rounded font-mono font-bold text-lg sm:text-base w-full sm:w-auto transition-colors">
+                                                                    -1
+                                                                </button>
+                                                                <button onClick={() => updateScore(country.id, 0)} className="bg-red-800 hover:bg-red-700 py-3 sm:px-4 sm:py-2 rounded text-base sm:text-sm col-span-1 sm:col-span-1 border border-red-500/30 w-full sm:w-auto font-bold transition-colors">
+                                                                    Reset
+                                                                </button>
+                                                                <button onClick={() => deleteCountry(country.id)} className="bg-orange-800 hover:bg-orange-700 py-3 sm:px-4 sm:py-2 rounded text-base sm:text-sm col-span-2 sm:col-span-1 border border-orange-500/30 w-full sm:w-auto font-bold transition-colors">
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                        {provided.placeholder}
                                     </div>
-                                </div>
-                            ))}
+                                )}
+                            </Droppable>
+                        </DragDropContext>
 
                         {countries.length === 0 && (
                             <div className="text-center text-gray-500 py-8">No countries added yet.</div>
