@@ -11,31 +11,26 @@ const CountryCell = ({ country, isHighest }) => {
   }
 
   return (
-    <div className="flex items-center w-full h-full border-[0.5px] border-white/60 p-1 lg:p-2 bg-black/40 overflow-hidden">
+    <div className="flex items-center justify-between w-full h-full border-[0.5px] border-white/60 p-2 lg:p-4 bg-black/40 overflow-hidden">
       <div className="flex items-center justify-center shrink-0">
         <img
           src={country.flag_url}
           alt={country.name}
-          className="w-[42px] h-[28px] lg:w-[84px] lg:h-[56px] object-cover"
+          className="w-[48px] h-[32px] lg:w-[96px] lg:h-[64px] object-cover"
         />
       </div>
 
-      <div className="ml-2 lg:ml-4 flex-grow flex items-center justify-between min-w-0">
-        <div className="font-[900] text-lg lg:text-3xl text-white uppercase tracking-wider truncate mr-2">
-          {country.name}
-        </div>
-        <div className="flex items-center justify-end px-2 h-full relative shrink-0">
-          {isHighest && (
-            <img
-              src="/fire-custom-transparent.gif"
-              alt="Highest Score Fire"
-              className="w-8 h-8 lg:w-12 lg:h-12 object-contain absolute opacity-80 pointer-events-none right-[85%]"
-            />
-          )}
-          <span className="text-[#d0e00d] text-2xl lg:text-[48px] font-roboto font-black tracking-tight drop-shadow-glow z-10">
-            {country.score}
-          </span>
-        </div>
+      <div className="flex items-center justify-end h-full relative shrink-0">
+        {isHighest && (
+          <img
+            src="/fire-custom-transparent.gif"
+            alt="Highest Score Fire"
+            className="w-8 h-8 lg:w-16 lg:h-16 object-contain absolute opacity-80 pointer-events-none mr-[110%]"
+          />
+        )}
+        <span className="text-[#d0e00d] text-4xl lg:text-[56px] font-roboto font-black tracking-tight drop-shadow-glow z-10">
+          {country.score}
+        </span>
       </div>
     </div>
   );
