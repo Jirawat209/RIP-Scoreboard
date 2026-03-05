@@ -173,7 +173,7 @@ function App() {
   const highestScorer = countries.length > 0 ? [...countries].sort((a, b) => b.score - a.score)[0] : null;
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-black font-roboto flex flex-col pt-2 pb-2 items-center justify-center">
+    <div className="relative w-full h-screen max-h-screen overflow-hidden bg-black font-roboto flex flex-col pt-2 pb-2 items-center justify-center">
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-screen pointer-events-none"
