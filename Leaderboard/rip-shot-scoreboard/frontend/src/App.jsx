@@ -190,7 +190,7 @@ function App() {
       <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-screen overflow-hidden mx-auto justify-between pt-1 pb-4 lg:pb-8">
 
         {/* Main Title Logo */}
-        <div className="flex justify-center shrink-0 mb-1 mt-0 w-full px-4">
+        <div className="flex justify-center shrink-0 mb-3 lg:mb-6 mt-0 w-full px-4">
           <img
             src="/title-logo.png"
             alt="R.I.P.SHOT SCOREBOARD"
