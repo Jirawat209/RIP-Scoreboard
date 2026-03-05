@@ -189,10 +189,14 @@ function App() {
 
       <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-screen overflow-hidden mx-auto justify-between pt-1 pb-4 lg:pb-8">
 
-        {/* Main Title */}
-        <h1 className="text-[5vw] lg:text-[72px] text-center text-white font-black tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-1 mt-0 shrink-0 leading-none">
-          R.I.P.SHOT SCOREBOARD
-        </h1>
+        {/* Main Title Logo */}
+        <div className="flex justify-center shrink-0 mb-1 mt-0 w-full px-4">
+          <img
+            src="/title-logo.png"
+            alt="R.I.P.SHOT SCOREBOARD"
+            className="w-full max-w-[800px] h-auto max-h-[80px] lg:max-h-[120px] object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
+          />
+        </div>
 
         {/* Highest Score Top Banner */}
         {highestScorer && <TopBanner highestCountry={highestScorer} />}
