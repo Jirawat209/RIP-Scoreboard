@@ -158,7 +158,7 @@ export default function Admin() {
     }
 
     return (
-        <div className="h-screen w-full overflow-y-auto bg-gray-900 text-white p-8">
+        <div className="min-h-screen bg-gray-900 text-white p-8">
             <div className="max-w-4xl mx-auto pb-12">
                 <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
                     <h1 className="text-3xl font-bold w-full sm:w-auto text-center sm:text-left">Leaderboard Admin</h1>
