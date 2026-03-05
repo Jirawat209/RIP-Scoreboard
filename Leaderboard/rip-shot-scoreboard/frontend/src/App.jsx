@@ -11,26 +11,31 @@ const CountryCell = ({ country, isHighest }) => {
   }
 
   return (
-    <div className="flex items-center w-full h-full border-[0.5px] border-white/60 p-2 lg:p-4 bg-black/40">
+    <div className="flex items-center w-full h-full border-[0.5px] border-white/60 p-1 lg:p-2 bg-black/40 overflow-hidden">
       <div className="flex items-center justify-center shrink-0">
         <img
           src={country.flag_url}
           alt={country.name}
-          className="w-[84px] h-[56px] object-cover"
+          className="w-[42px] h-[28px] lg:w-[84px] lg:h-[56px] object-cover"
         />
       </div>
 
-      <div className="flex-1 flex items-center justify-end px-2 h-full relative">
-        {isHighest && (
-          <img
-            src="/fire-custom-transparent.gif"
-            alt="Highest Score Fire"
-            className="w-12 h-12 object-contain absolute opacity-80 pointer-events-none -translate-x-[4.5rem]"
-          />
-        )}
-        <span className="text-[#d0e00d] text-4xl lg:text-[48px] font-roboto font-black tracking-tight drop-shadow-glow z-10">
-          {country.score}
-        </span>
+      <div className="ml-2 lg:ml-4 flex-grow flex items-center justify-between min-w-0">
+        <div className="font-[900] text-lg lg:text-3xl text-white uppercase tracking-wider truncate mr-2">
+          {country.name}
+        </div>
+        <div className="flex items-center justify-end px-2 h-full relative shrink-0">
+          {isHighest && (
+            <img
+              src="/fire-custom-transparent.gif"
+              alt="Highest Score Fire"
+              className="w-8 h-8 lg:w-12 lg:h-12 object-contain absolute opacity-80 pointer-events-none right-[85%]"
+            />
+          )}
+          <span className="text-[#d0e00d] text-2xl lg:text-[48px] font-roboto font-black tracking-tight drop-shadow-glow z-10">
+            {country.score}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -40,25 +45,25 @@ const TopBanner = ({ highestCountry }) => {
   if (!highestCountry) return null;
 
   return (
-    <div className="flex items-center justify-center mb-4">
-      <div className="flex items-center bg-black border-[1.5px] border-white shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full h-[80px] md:h-[96px] overflow-hidden mx-auto pr-10">
-        <div className="h-full flex items-center justify-center px-6 md:px-8 shrink-0 border-r border-white/30 bg-black/40">
+    <div className="flex items-center justify-center mb-1 lg:mb-4 px-2 w-full shrink-0">
+      <div className="flex items-center bg-black border-[1.5px] border-white shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full h-[8vh] min-h-[50px] max-h-[96px] overflow-hidden mx-auto pr-4 lg:pr-10">
+        <div className="h-full flex items-center justify-center px-4 md:px-8 shrink-0 border-r border-white/30 bg-black/40">
           <img
             src={highestCountry.flag_url}
             alt={highestCountry.name}
-            className="w-[80px] h-[54px] md:w-[100px] md:h-[66px] object-cover rounded shadow"
+            className="w-[50px] h-[34px] md:w-[100px] md:h-[66px] object-cover rounded shadow"
           />
         </div>
-        <div className="flex items-center pl-8 h-full">
-          <span className="text-white text-xl md:text-[28px] font-roboto font-bold tracking-wider mr-6 uppercase">
+        <div className="flex items-center pl-4 lg:pl-8 h-full">
+          <span className="text-white text-sm md:text-[28px] font-roboto font-bold tracking-wider mr-2 lg:mr-6 uppercase truncate">
             Highest Score of the Month
           </span>
           <img
             src="/fire-custom-transparent.gif"
             alt="Highest Score Fire"
-            className="w-12 h-12 md:w-14 md:h-14 object-contain mr-2 relative bottom-1"
+            className="w-6 h-6 md:w-14 md:h-14 object-contain mr-1 lg:mr-2 relative bottom-1"
           />
-          <span className="text-[#d0e00d] text-4xl md:text-[56px] font-roboto font-black tracking-tighter drop-shadow-glow mt-[4px]">
+          <span className="text-[#d0e00d] text-2xl md:text-[56px] font-roboto font-black tracking-tighter drop-shadow-glow mt-[2px] lg:mt-[4px]">
             {highestCountry.score}
           </span>
         </div>
@@ -71,25 +76,25 @@ const BottomBanner = ({ historicalWinner }) => {
   if (!historicalWinner) return null;
 
   return (
-    <div className="flex items-center justify-center mt-4 pt-2">
-      <div className="flex items-center bg-black border-[1.5px] border-white shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full h-[70px] md:h-[86px] overflow-hidden mx-auto pr-8">
-        <div className="h-full flex items-center justify-center px-6 shrink-0 border-r border-white/30 bg-black/40">
+    <div className="flex items-center justify-center mt-1 lg:mt-4 pt-1 lg:pt-2 px-2 w-full shrink-0">
+      <div className="flex items-center bg-black border-[1.5px] border-white shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full h-[7vh] min-h-[46px] max-h-[86px] overflow-hidden mx-auto pr-4 lg:pr-8">
+        <div className="h-full flex items-center justify-center px-4 lg:px-6 shrink-0 border-r border-white/30 bg-black/40">
           <img
             src={historicalWinner.flag_url}
             alt={historicalWinner.name}
-            className="w-[70px] h-[46px] md:w-[90px] md:h-[60px] object-cover rounded shadow"
+            className="w-[45px] h-[30px] md:w-[90px] md:h-[60px] object-cover rounded shadow"
           />
         </div>
-        <div className="flex items-center pl-6 h-full">
-          <span className="text-white text-lg md:text-[24px] font-roboto font-bold tracking-wider mr-4 uppercase">
+        <div className="flex items-center pl-4 lg:pl-6 h-full">
+          <span className="text-white text-xs md:text-[24px] font-roboto font-bold tracking-wider mr-2 lg:mr-4 uppercase truncate">
             Highest Score of Last Month
           </span>
           <img
             src="/fire-custom-transparent.gif"
             alt="Highest Score Fire"
-            className="w-10 h-10 md:w-12 md:h-12 object-contain mr-2 relative bottom-1"
+            className="w-5 h-5 md:w-12 md:h-12 object-contain mr-1 lg:mr-2 relative bottom-1"
           />
-          <span className="text-[#d0e00d] text-3xl md:text-[48px] font-roboto font-black tracking-tighter drop-shadow-glow mt-[2px]">
+          <span className="text-[#d0e00d] text-xl md:text-[48px] font-roboto font-black tracking-tighter drop-shadow-glow mt-[1px] lg:mt-[2px]">
             {historicalWinner.score}
           </span>
         </div>
@@ -189,10 +194,10 @@ function App() {
         {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
       </button>
 
-      <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-[1080px] mx-auto justify-center">
+      <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-screen overflow-hidden mx-auto justify-between pt-2 pb-2">
 
         {/* Main Title */}
-        <h1 className="text-5xl md:text-[76px] text-center text-white font-black tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-6 mt-4">
+        <h1 className="text-[5vw] lg:text-[76px] text-center text-white font-black tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-2 mt-2 shrink-0">
           R.I.P.SHOT SCOREBOARD
         </h1>
 
@@ -200,8 +205,8 @@ function App() {
         {highestScorer && <TopBanner highestCountry={highestScorer} />}
 
         {/* Static Matrix */}
-        <div className="flex-1 flex items-center justify-center w-full px-4 md:px-12 my-2">
-          <div className="grid grid-cols-5 grid-rows-4 w-full h-[520px] max-w-[1700px] mx-auto border-[0.5px] border-white/60 bg-black/40">
+        <div className="flex-1 flex items-center justify-center w-full px-4 md:px-12 my-2 overflow-hidden">
+          <div className="grid grid-cols-5 grid-rows-4 w-full h-full max-h-[600px] max-w-[1700px] mx-auto border-[0.5px] border-white/60 bg-black/40">
             {Array.from({ length: 20 }).map((_, i) => {
               const country = countries[i];
               return (
