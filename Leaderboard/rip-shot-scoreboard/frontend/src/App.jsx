@@ -128,6 +128,16 @@ function App() {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  // Forcefully suppress all scrollbars ONLY on the TV Scoreboard component mount
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+      document.documentElement.style.overflow = 'auto';
+    };
+  }, []);
+
   useEffect(() => {
     const fetchLeaderboard = async () => {
       const { data } = await supabase
