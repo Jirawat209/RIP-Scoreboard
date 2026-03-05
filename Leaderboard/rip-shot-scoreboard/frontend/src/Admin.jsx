@@ -178,7 +178,16 @@ export default function Admin() {
                                     type="text"
                                     placeholder="Type to filter countries..."
                                     value={addCountrySearch}
-                                    onChange={e => setAddCountrySearch(e.target.value)}
+                                    onChange={e => {
+                                        const query = e.target.value;
+                                        setAddCountrySearch(query);
+                                        const filtered = availableCountries.filter(c => c.name.common.toLowerCase().includes(query.toLowerCase()));
+                                        if (filtered.length > 0) {
+                                            setSelectedCountryCode(filtered[0].cca2);
+                                        } else {
+                                            setSelectedCountryCode('');
+                                        }
+                                    }}
                                     className="w-full bg-gray-700 text-white border border-gray-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none mb-2"
                                 />
                                 <select
@@ -218,7 +227,16 @@ export default function Admin() {
                                     type="text"
                                     placeholder="Type to filter countries..."
                                     value={historyCountrySearch}
-                                    onChange={e => setHistoryCountrySearch(e.target.value)}
+                                    onChange={e => {
+                                        const query = e.target.value;
+                                        setHistoryCountrySearch(query);
+                                        const filtered = availableCountries.filter(c => c.name.common.toLowerCase().includes(query.toLowerCase()));
+                                        if (filtered.length > 0) {
+                                            setHistoryCountryCode(filtered[0].cca2);
+                                        } else {
+                                            setHistoryCountryCode('');
+                                        }
+                                    }}
                                     className="w-full bg-gray-700 text-white border border-gray-600 rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none mb-2"
                                 />
                                 <select
