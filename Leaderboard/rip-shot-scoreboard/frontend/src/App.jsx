@@ -187,7 +187,7 @@ function App() {
         {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
       </button>
 
-      <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-screen overflow-hidden mx-auto justify-between pt-1 pb-2">
+      <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-screen overflow-hidden mx-auto justify-between pt-1 pb-4 lg:pb-8">
 
         {/* Main Title */}
         <h1 className="text-[5vw] lg:text-[72px] text-center text-white font-black tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-1 mt-0 shrink-0 leading-none">
