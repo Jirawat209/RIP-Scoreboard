@@ -40,7 +40,7 @@ const TopBanner = ({ highestCountry }) => {
   if (!highestCountry) return null;
 
   return (
-    <div className="flex items-center justify-center mb-1 lg:mb-4 px-2 w-full shrink-0">
+    <div className="flex items-center justify-center mb-1 px-2 w-full shrink-0">
       <div className="flex items-center bg-black border-[1.5px] border-white shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full h-[8vh] min-h-[50px] max-h-[96px] overflow-hidden mx-auto pr-4 lg:pr-10">
         <div className="h-full flex items-center justify-center px-4 md:px-8 shrink-0 border-r border-white/30 bg-black/40">
           <img
@@ -181,16 +181,16 @@ function App() {
       {/* Fullscreen Toggle Button */}
       <button
         onClick={toggleFullScreen}
-        className="absolute bottom-4 right-4 z-50 p-3 bg-black/40 hover:bg-black/80 border border-white/20 text-white/50 hover:text-white rounded-full transition-all duration-300 backdrop-blur-sm shadow-xl cursor-pointer"
+        className="absolute bottom-8 right-4 z-50 p-3 bg-black/40 hover:bg-black/80 border border-white/20 text-white/50 hover:text-white rounded-full transition-all duration-300 backdrop-blur-sm shadow-xl cursor-pointer"
         title="Toggle Fullscreen"
       >
         {isFullscreen ? <Minimize size={24} /> : <Maximize size={24} />}
       </button>
 
-      <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-screen overflow-hidden mx-auto justify-between pt-2 pb-2">
+      <div className="relative z-20 flex flex-col h-full flex-1 w-full max-w-[1920px] max-h-screen overflow-hidden mx-auto justify-between pt-1 pb-2">
 
         {/* Main Title */}
-        <h1 className="text-[5vw] lg:text-[76px] text-center text-white font-black tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-2 mt-2 shrink-0">
+        <h1 className="text-[5vw] lg:text-[72px] text-center text-white font-black tracking-tight drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-1 mt-0 shrink-0 leading-none">
           R.I.P.SHOT SCOREBOARD
         </h1>
 
