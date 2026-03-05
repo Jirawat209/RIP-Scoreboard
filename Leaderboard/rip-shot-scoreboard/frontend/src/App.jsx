@@ -150,40 +150,12 @@ function App() {
     fetchLeaderboard();
     fetchSettings();
 
-    const countrySub = supabase
-      .channel('public:countries')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'countries' }, (payload) => {
-        setCountries((current) => {
-          const updated = [...current];
-          const idx = updated.findIndex((c) => c.id === payload.new.id);
-          if (idx !== -1) updated[idx] = payload.new;
-          return updated.sort((a, b) => (a.position !== b.position ? a.position - b.position : a.id - b.id));
-        });
-      })
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'countries' }, (payload) => {
-        setCountries((current) => {
-          const updated = [...current, payload.new];
-          return updated.sort((a, b) => (a.position !== b.position ? a.position - b.position : a.id - b.id));
-        });
-      })
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'countries' }, (payload) => {
-        setCountries((current) => current.filter((c) => c.id !== payload.old.id));
-      })
-      .subscribe();
+    const intervalId = setInterval(() => {
+      fetchLeaderboard();
+      fetchSettings();
+    }, 10000);
 
-    const settingSub = supabase
-      .channel('public:settings')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'settings' }, (payload) => {
-        if (payload.new && payload.new.key === 'last_month_winner') {
-          setLastMonthWinner(payload.new.value);
-        }
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(countrySub);
-      supabase.removeChannel(settingSub);
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   const highestScorer = countries.length > 0 ? [...countries].sort((a, b) => b.score - a.score)[0] : null;
